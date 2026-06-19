@@ -1,6 +1,6 @@
 # Maven
 # Build Heloavy Web Application and run tests with Apache Maven.
-# Azure DevOps CI/CD Pipeline — Heloavy Pvt. Ltd.
+# Azure DevOps CI/CD Pipeline - Heloavy Pvt. Ltd.
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
@@ -12,6 +12,7 @@ pool:
 
 steps:
 - task: Maven@3
+  displayName: 'Build HeloavyWebApp with Maven'
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
@@ -21,17 +22,16 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
-  displayName: 'Build HeloavyWebApp with Maven'
 
 - task: CopyFiles@2
+  displayName: 'Copy WAR artifact'
   inputs:
     Contents: '**/*.war'
     TargetFolder: '$(build.artifactstagingdirectory)'
-  displayName: 'Copy WAR artifact'
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Heloavy Build Artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'heloavy-drop'
     publishLocation: 'Container'
-  displayName: 'Publish Heloavy Build Artifacts'
